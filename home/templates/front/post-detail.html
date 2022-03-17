@@ -1,0 +1,49 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    <div class="container">
+        <a href="{{post.user.address}}" target="_blank">
+            <div class="post-item">
+                {% if post.media_file %}
+                    <div class='post-slider'>
+                        {% for media in post.media_file %}
+                            {% if media.media_type == '1' %}
+                                <img src="{{ media.thumbnail_url }}" />
+                            {% elif media.media_type == '2' %}
+                                <video width="420" controls autoplay>
+                                    <source src="{{media.video_url}}" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {% if post.media_type == '1' %}
+                        <div class="post-slider">
+                            <img src="{{ post.thumbnail_url  }}" />
+                        </div>
+                    {% elif post.media_type == '2' %}
+                        <div class="post-slider">
+                            <video width="420" controls autoplay>
+                                <source src="{{post.video_url}}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                    {% endif %}
+                {% endif %}
+
+                    </br>
+                <div class='user-post-box'>
+                    <img src={{post.user.avatar}} />
+                    <div>
+                        <p>اینستاگرام: {{post.user.username}}</p>
+                        <p>نام پیج: {{post.user.name}}</p>
+                    </div>
+                </div>
+
+                <p>{{ post.caption_text }}</p>
+            </div>
+        </a>
+        
+    </div>
+{% endblock %}

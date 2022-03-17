@@ -1,0 +1,18 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    <div class="container">
+        {% for user in users %}
+            <a href="{{ user.address }}">
+                <div class="user-box">
+                    <img src="{{ user.avatar }}" />
+                    <div>
+                        username: <span>{{ user.username }}</span></br>
+                        page name: <span>{{ user.name }}</span>></br>
+                        bio: <span> {{ user.desc }} </span>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+{% endblock %}

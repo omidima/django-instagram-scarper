@@ -1,0 +1,16 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    <div class="container">
+        {% for post in posts %}
+            <a href="/posts/{{ post.pk }}">
+                <div class="user-box">
+                    <img src="{{ post.thumbnail_url  }}" />
+                    <div>
+                        {{post.caption_text}}
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+{% endblock %}
