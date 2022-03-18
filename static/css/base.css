@@ -50,9 +50,7 @@ a {
 
 .post-slider {
     display: flex;
-    scroll-behavior: smooth;
     overflow-x: scroll;
-    scroll-snap-type: x;
     border-radius: 5px;
     direction: ltr;
 }
@@ -87,6 +85,7 @@ a {
 }
 
 header ul {
+    list-style: none;
     list-style: none;
     display: flex;
     gap: 10px;
