@@ -2,12 +2,11 @@ from typing import List
 import requests
 from django.shortcuts import render, redirect
 from django.http import HttpRequest
-from django.contrib.auth.decorators import login_required
 from django.views import View
 from django.conf import settings
-from .models import  InstagramPage,AppUser, ResourceFile, MediaFile, Post
+from .models import  InstagramPage, ResourceFile, MediaFile, Post, Review
 from .utils.instagram import Instagram
-from .serializer import PostSerializer, MediaSerializer
+from .serializer import PostSerializer, MediaSerializer, ReviewSerializer
 from instagrapi.types import Media, Resource
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.decorators import action
@@ -15,7 +14,8 @@ from rest_framework.response import Response
 import random
 import os
 
-class getInstagramPosts(View):
+
+class GetInstagramPosts(View):
     def get(self,req):
         users = InstagramPage.objects.all()
         
@@ -166,6 +166,7 @@ class PostDetail(View):
             'post': post
         })
 
+
 # rest api framework 
 class InstagramPost(ReadOnlyModelViewSet):
     queryset = Post.objects.select_related('user').select_related('resource').all()
@@ -176,6 +177,25 @@ class ResourceItems(ReadOnlyModelViewSet):
     queryset = MediaFile.objects.select_related('resource').all()
     serializer_class = MediaSerializer
 
-    @action(methods=['get'], detail=True,url_name='get_media',url_path='get-media')
-    def get_media(self,req, pk):
-        return Response(MediaSerializer(self.queryset.filter(resource= pk).all(), many=True).data)
+
+class GetResourceMedia(ReadOnlyModelViewSet):
+
+    def get_serializer_class(self):
+        return MediaSerializer
+
+    def get_queryset(self):
+        return MediaFile.objects.filter(resource_id = self.kwargs['resources_pk'])
+
+    def get_serializer_context(self):
+        return {'resource_id': self.kwargs['resources_pk']}
+
+
+class ReviewViewModel(ModelViewSet):
+    serializer_class = ReviewSerializer
+
+    def get_queryset(self):
+        return Review.objects.filter(post_id=self.kwargs['posts_pk'])
+
+    def get_serializer_context(self):
+        return {'post_id': self.kwargs['posts_pk']}
+

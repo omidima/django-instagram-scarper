@@ -1,7 +1,8 @@
 import resource
 from rest_framework.serializers import ModelSerializer, Serializer
 from rest_framework import serializers
-from .models import Post, ResourceFile, MediaFile
+from .models import Post, ResourceFile, MediaFile, Review
+
 
 class MediaSerializer(ModelSerializer):
     class Meta:
@@ -21,7 +22,6 @@ class ResourceSerializer(ModelSerializer):
         return MediaSerializer(medias, many=True).data
 
 
-
 class PostSerializer(ModelSerializer):
     class Meta:
         model = Post
@@ -29,4 +29,11 @@ class PostSerializer(ModelSerializer):
 
     resource = ResourceSerializer()
 
-    
+
+class ReviewSerializer(ModelSerializer):
+    class Meta:
+        model = Review
+        fields = ['pk', 'username', 'post', 'content', 'date']
+
+    def create(self, validated_data):
+        return Review.objects.create(post_id= self.context['post_id'], **validated_data)

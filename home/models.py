@@ -73,3 +73,10 @@ class Post(models.Model):
     class Meta:
         db_table = ''
         ordering = ['-like_count']
+
+
+class Review(models.Model):
+    username = models.TextField()
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='post')
+    content = models.TextField()
+    date = models.DateTimeField(auto_now_add=True)
